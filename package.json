@@ -9,6 +9,7 @@
     "bin": {
         "eyeball": "eyeball.js"
     },
+    "keywords": ["command line","tool","dependencies","package","modules","cli","workflow"],
     "author": "Tom Chambers",
     "license": "ISC",
     "dependencies": {
