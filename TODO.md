@@ -1,0 +1,3 @@
+- should be runnable from the command line 'eyeball check' and ignore node_modules by default
+- should read a .eyeball file to add dirs/files to the ignored stuff
+- should write to dependencies with the missing packages / should read node_modules/NAME/package.json to get the currently installed version
