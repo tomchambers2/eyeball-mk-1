@@ -1,0 +1,69 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish', './' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.35
+4 verbose publish [ './' ]
+5 verbose cache add [ './', null ]
+6 verbose cache add name=undefined spec="./" args=["./",null]
+7 verbose parsed url { protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: './',
+7 verbose parsed url   path: './',
+7 verbose parsed url   href: './' }
+8 silly lockFile 0ee6c175- ./
+9 verbose lock ./ /Users/tomchambers/.npm/0ee6c175-.lock
+10 verbose tar pack [ '/Users/tomchambers/.npm/eyeball-mk-1/0.0.1/package.tgz',
+10 verbose tar pack   './' ]
+11 verbose tarball /Users/tomchambers/.npm/eyeball-mk-1/0.0.1/package.tgz
+12 verbose folder ./
+13 info prepublish eyeball-mk-1@0.0.1
+14 silly lockFile 04cb2bca-tar tar://./
+15 verbose lock tar://./ /Users/tomchambers/.npm/04cb2bca-tar.lock
+16 silly lockFile 0516ac38-m-eyeball-mk-1-0-0-1-package-tgz tar:///Users/tomchambers/.npm/eyeball-mk-1/0.0.1/package.tgz
+17 verbose lock tar:///Users/tomchambers/.npm/eyeball-mk-1/0.0.1/package.tgz /Users/tomchambers/.npm/0516ac38-m-eyeball-mk-1-0-0-1-package-tgz.lock
+18 silly lockFile 04cb2bca-tar tar://./
+19 silly lockFile 04cb2bca-tar tar://./
+20 silly lockFile 0516ac38-m-eyeball-mk-1-0-0-1-package-tgz tar:///Users/tomchambers/.npm/eyeball-mk-1/0.0.1/package.tgz
+21 silly lockFile 0516ac38-m-eyeball-mk-1-0-0-1-package-tgz tar:///Users/tomchambers/.npm/eyeball-mk-1/0.0.1/package.tgz
+22 silly lockFile f5a2b02b-s-npm-eyeball-mk-1-0-0-1-package /Users/tomchambers/.npm/eyeball-mk-1/0.0.1/package
+23 verbose lock /Users/tomchambers/.npm/eyeball-mk-1/0.0.1/package /Users/tomchambers/.npm/f5a2b02b-s-npm-eyeball-mk-1-0-0-1-package.lock
+24 silly lockFile f5a2b02b-s-npm-eyeball-mk-1-0-0-1-package /Users/tomchambers/.npm/eyeball-mk-1/0.0.1/package
+25 silly lockFile f5a2b02b-s-npm-eyeball-mk-1-0-0-1-package /Users/tomchambers/.npm/eyeball-mk-1/0.0.1/package
+26 silly lockFile 0ee6c175- ./
+27 silly lockFile 0ee6c175- ./
+28 silly publish { name: 'eyeball-mk-1',
+28 silly publish   version: '0.0.1',
+28 silly publish   description: 'A global CLI package that scans the current directory and diffs package.json with require statements',
+28 silly publish   main: 'index.js',
+28 silly publish   scripts: { test: 'echo "Error: no test specified" && exit 1' },
+28 silly publish   bin: { eyeball: 'eyeball.js' },
+28 silly publish   author: { name: 'Tom Chambers' },
+28 silly publish   license: 'ISC',
+28 silly publish   dependencies:
+28 silly publish    { commander: '2.7.1',
+28 silly publish      lodash: '3.6.0',
+28 silly publish      async: '0.9.0',
+28 silly publish      figlet: '1.1.0',
+28 silly publish      colors: '1.0.3',
+28 silly publish      arbitrary: '*' },
+28 silly publish   gitHead: '371a21059c9323491644edcb99a8921a9ac5254b',
+28 silly publish   readme: 'ERROR: No README data found!',
+28 silly publish   _id: 'eyeball-mk-1@0.0.1',
+28 silly publish   _shasum: '41561fe5b325b8dc0d262efa9215d4d45b377fb5',
+28 silly publish   _from: './' }
+29 error need auth auth and email required for publishing
+29 error need auth You need to authorize this machine using `npm adduser`
+30 error System Darwin 14.3.0
+31 error command "node" "/usr/local/bin/npm" "publish" "./"
+32 error cwd /Users/tomchambers/projects/eyeball-mk-1
+33 error node -v v0.10.35
+34 error npm -v 1.4.28
+35 error code ENEEDAUTH
+36 verbose exit [ 1, true ]
