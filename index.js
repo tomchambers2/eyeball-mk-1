@@ -7,6 +7,8 @@ var colors = require('colors')
 
 var coreModules = ['assert','buffer','child_process','cluster','console','constants','crypto','dgram','dns','domain','events','freelist','fs','http','https','module','net','os','path','punycode','querystring','readline','repl','smalloc','stream','string_decoder','sys','timers','tls','tty','url','util','vm','zlib']
 
+/* checking functions */
+
 function getFilesList(callback) {
 	var statements = []
 	recursive('./', ['node_modules'], function (err, files) {
@@ -63,9 +65,51 @@ function filterAndCombine(statements, dependencies, callback) {
 	callback(null, missing)
 }
 
-function ball(fix) {
-	if (fix) return
+/* fixing functions */
 
+function readModuleVersion(module, callback) {
+	fs.readFile('node_modules/'+module+'/package.json', {  }, function (err, data) {
+		if (err) throw err
+		var version = JSON.parse(data.toString('utf8')).version;
+	  callback(err, version)
+	})	
+}
+
+function getPackage(callback) {
+	fs.readFile('package.json', {  }, function (err, data) {
+	  if (err) return callback(err);
+	  callback(null, JSON.parse(data.toString('utf8')))
+	})
+}
+
+function writePackage(data, callback) {
+	console.log(data);
+	fs.writeFile('package.json', JSON.stringify(data, null, 4), function(err) {
+		if (err) return callback(err)
+		callback(null)
+	})
+}
+
+function addModuleToPackage(module, version, callback) {
+	getPackage(function(err, packageJson) {
+		packageJson.dependencies[module] = version
+		writePackage(packageJson, callback)
+	})	
+}
+
+function addToPackage(missing) {
+	missing.forEach(function(module) {
+		readModuleVersion(module, function(err, version) {
+			addModuleToPackage(module, version, function(err) {
+				if (err) return console.log(err.red)
+				var message = module+" added @"+version
+				console.log(message.green)
+			})
+		})
+	})
+}
+
+function ball(fix) {
 	console.log("Checking",process.cwd(),"package.json")
 
 	async.waterfall([
@@ -86,11 +130,15 @@ function ball(fix) {
 				console.log(name.red)
 			})
   	})
+
+  	if (fix) {
+  		addToPackage(missing)
+  	}
 	})
 }
 
 if(require.main === module) 
-   ball()
+   ball(true)
 
 module.exports = {
 	ball: ball
