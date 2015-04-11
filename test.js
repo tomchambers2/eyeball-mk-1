@@ -1,1 +1,1 @@
-var lodash = require('lodash')
+var lodash = require('arbitrary')

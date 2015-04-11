@@ -50,10 +50,22 @@ function checkForPackages(files, callback) {
   }
 }
 
+function isJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
 function getDependencies(statements, callback) {
 	fs.readFile('package.json', {  }, function (err, data) {
-	  if (err) throw err;
-	  callback(null, statements, JSON.parse(data.toString('utf8')).dependencies)
+	  if (!isJsonString(data)) {
+	  	return console.log("Your package.json contains invalid JSON. Eyeball cannot continue".red)
+	  }
+	  var dependencies = JSON.parse(data.toString('utf8')).dependencies
+	  callback(null, statements, dependencies)
 	})
 }
 
@@ -69,8 +81,7 @@ function filterAndCombine(statements, dependencies, callback) {
 
 function readModuleVersion(module, callback) {
 	fs.readFile('node_modules/'+module+'/package.json', {  }, function (err, data) {
-		if (err) throw err
-		var version = JSON.parse(data.toString('utf8')).version;
+		var version = data && JSON.parse(data.toString('utf8')).version
 	  callback(err, version)
 	})	
 }
@@ -83,7 +94,6 @@ function getPackage(callback) {
 }
 
 function writePackage(data, callback) {
-	console.log(data);
 	fs.writeFile('package.json', JSON.stringify(data, null, 4), function(err) {
 		if (err) return callback(err)
 		callback(null)
@@ -92,20 +102,32 @@ function writePackage(data, callback) {
 
 function addModuleToPackage(module, version, callback) {
 	getPackage(function(err, packageJson) {
-		packageJson.dependencies[module] = version
+		packageJson.dependencies[module] = version || "*"
 		writePackage(packageJson, callback)
-	})	
+	})
 }
 
 function addToPackage(missing) {
-	missing.forEach(function(module) {
+	var doNpm
+	async.eachSeries(missing, function(module, callback) {
 		readModuleVersion(module, function(err, version) {
 			addModuleToPackage(module, version, function(err) {
 				if (err) return console.log(err.red)
-				var message = module+" added @"+version
-				console.log(message.green)
+
+				if (version) {
+					var message = module+" already installed, added @"+version
+					console.log(message.green)
+				} else {
+					var message = module+" not installed, added with * in place of version"
+					doNpm = true
+					console.log(message.yellow)
+				}
+
+				callback(null)
 			})
 		})
+	}, function(err) {
+		if (doNpm) console.log("You need to run 'npm install' now to install missing packages".yellow);
 	})
 }
 
@@ -119,19 +141,16 @@ function ball(fix) {
 		filterAndCombine
 	], function(err, missing) {
 		if (!missing.length) {
-			figlet("Awww  yeah!", function (err, ascii){
-      	console.log(ascii.toString().rainbow);    
-    	})
+			console.log(figlet.textSync('Aww yeah!').rainbow);  		
 			return
 		}
-		figlet("Missing packages", function (err, ascii){
-    	console.log(ascii.toString().red);    
-			_.forEach(missing, function(name) {
-				console.log(name.red)
-			})
-  	})
+		console.log(figlet.textSync('Missing packages').red);  		
+		_.forEach(missing, function(name) {
+			console.log(name.red)
+		})
 
   	if (fix) {
+			console.log(figlet.textSync('Fixing packages').yellow);  		
   		addToPackage(missing)
   	}
 	})
