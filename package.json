@@ -1,6 +1,6 @@
 {
     "name": "eyeball-mk-1",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "A global CLI package that scans the current directory and diffs package.json with require statements",
     "main": "index.js",
     "scripts": {

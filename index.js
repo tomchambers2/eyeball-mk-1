@@ -25,7 +25,7 @@ function readData(path, callback) {
 
 function findRequires(data) {
 	var matches = []
-	var regex = /require\(\'([a-zA-Z0-9-]+)\'\)/g
+	var regex = /require\(\'([a-zA-Z0-9-_]+)\'\)/g
   var match = regex.exec(data)
   match && matches.push(match[1])
   while (match!=null) {
