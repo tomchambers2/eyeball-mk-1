@@ -9,7 +9,15 @@
     "bin": {
         "eyeball": "eyeball.js"
     },
-    "keywords": ["command line","tool","dependencies","package","modules","cli","workflow"],
+    "keywords": [
+        "command line",
+        "tool",
+        "dependencies",
+        "package",
+        "modules",
+        "cli",
+        "workflow"
+    ],
     "author": "Tom Chambers",
     "license": "ISC",
     "dependencies": {
@@ -17,6 +25,7 @@
         "lodash": "3.6.0",
         "async": "0.9.0",
         "figlet": "1.1.0",
-        "colors": "1.0.3"
+        "colors": "1.0.3",
+        "recursive-readdir": "1.2.1"
     }
 }
