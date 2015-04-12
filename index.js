@@ -64,7 +64,7 @@ function getDependencies(statements, callback) {
 	  if (!isJsonString(data)) {
 	  	return console.log("Your package.json contains invalid JSON. Eyeball cannot continue".red)
 	  }
-	  var dependencies = JSON.parse(data.toString('utf8')).dependencies
+	  var dependencies = JSON.parse(data.toString('utf8')).dependencies 
 	  callback(null, statements, dependencies)
 	})
 }
@@ -102,6 +102,7 @@ function writePackage(data, callback) {
 
 function addModuleToPackage(module, version, callback) {
 	getPackage(function(err, packageJson) {
+		packageJson.dependencies = packageJson.dependencies || {}
 		packageJson.dependencies[module] = version || "*"
 		writePackage(packageJson, callback)
 	})
