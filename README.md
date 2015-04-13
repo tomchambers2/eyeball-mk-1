@@ -15,3 +15,4 @@ Run it in the same directory as your package.json. Eyeball will not recursively 
 
 ## Todo
 - write tests
+- handle devDependencies
