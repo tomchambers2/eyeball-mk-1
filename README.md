@@ -15,4 +15,5 @@ Run it in the same directory as your package.json. Eyeball will not recursively 
 
 ## Todo
 - write tests
-- handle devDependencies
+- handle devDependencies, currently it doesn't realise that packages might be in there rather than deps
+- get the latest version from if unknown rather than just putting *
