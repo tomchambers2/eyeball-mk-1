@@ -4,6 +4,7 @@ var async = require('async')
 var recursive = require('recursive-readdir')
 var figlet = require('figlet')
 var colors = require('colors')
+var npm = require('npm')
 
 var coreModules = ['assert','buffer','child_process','cluster','console','constants','crypto','dgram','dns','domain','events','freelist','fs','http','https','module','net','os','path','punycode','querystring','readline','repl','smalloc','stream','string_decoder','sys','timers','tls','tty','url','util','vm','zlib']
 
@@ -64,7 +65,9 @@ function getDependencies(statements, callback) {
 	  if (!isJsonString(data)) {
 	  	return console.log("Your package.json contains invalid JSON. Eyeball cannot continue".red)
 	  }
-	  var dependencies = JSON.parse(data.toString('utf8')).dependencies 
+	  var dependencies = JSON.parse(data.toString('utf8')).dependencies
+	  var devDependencies = JSON.parse(data.toString('utf8')).devDependencies
+	  var combinedDeps = _.merge(dependencies, devDependencies)
 	  callback(null, statements, dependencies)
 	})
 }
@@ -103,24 +106,26 @@ function writePackage(data, callback) {
 function addModuleToPackage(module, version, callback) {
 	getPackage(function(err, packageJson) {
 		packageJson.dependencies = packageJson.dependencies || {}
-		packageJson.dependencies[module] = version || "*"
+		if (!version) return callback()
+		packageJson.dependencies[module] = version
 		writePackage(packageJson, callback)
 	})
 }
 
 function addToPackage(missing) {
 	var doNpm
+	var notInstalled = [] 
 	async.eachSeries(missing, function(module, callback) {
 		readModuleVersion(module, function(err, version) {
 			addModuleToPackage(module, version, function(err) {
 				if (err) return console.log(err.red)
 
 				if (version) {
-					var message = module+" already installed, added @"+version
+					var message = module+" added to package.json @"+version
 					console.log(message.green)
 				} else {
-					var message = module+" not installed, added with * in place of version"
-					doNpm = true
+					notInstalled.push(module)
+					var message = module+" not installed, will npm install and add to package"
 					console.log(message.yellow)
 				}
 
@@ -128,7 +133,15 @@ function addToPackage(missing) {
 			})
 		})
 	}, function(err) {
-		if (doNpm) console.log("You need to run 'npm install' now to install missing packages".yellow);
+		if (notInstalled.length) {
+			npm.load(null, function(err) { 
+				if (err) throw err
+				npm.commands.install(notInstalled, function(err, data) {
+					console.log('All uninstalled modules installed'.green)
+					addToPackage(notInstalled)
+				})
+			})
+		}
 	})
 }
 
@@ -150,10 +163,10 @@ function ball(fix) {
 			console.log(name.red)
 		})
 
-  	if (fix) {
+	  	if (fix) {
 			console.log(figlet.textSync('Fixing packages').yellow);  		
-  		addToPackage(missing)
-  	}
+	  		addToPackage(missing)
+	  	}
 	})
 }
 
